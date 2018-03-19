@@ -5,7 +5,8 @@ const userFactory = require("../factories/userFactory");
 class CustomPage {
   static async build() {
     const broswer = await puppeteer.launch({
-      headless: false
+      headless: true,
+      args: ["--no-sandbox"]
     });
 
     const page = await broswer.newPage();
@@ -29,7 +30,7 @@ class CustomPage {
     // use page.goto prior to setCookie or set a domain key value pair
     await this.page.setCookie({ name: "session", value: session });
     await this.page.setCookie({ name: "session.sig", value: sig });
-    await this.page.goto("localhost:3000/blogs"); // page refresh after setting credentials
+    await this.page.goto("http://localhost:3000/blogs"); // page refresh after setting credentials
     await this.page.waitFor('a[href="/auth/logout"]'); // waits for React to render element
   }
 
@@ -69,7 +70,7 @@ class CustomPage {
   }
 
   execRequests(actions) {
-    Promise.all(
+    return Promise.all(
       actions.map(({ method, path, data }) => {
         return this[method](path, data);
       })
