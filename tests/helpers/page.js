@@ -36,6 +36,45 @@ class CustomPage {
   async getContentsOf(selector) {
     return this.page.$eval(selector, el => el.innerHTML);
   }
+
+  get(path) {
+    // Note: function is stringyfied when passed to chromium
+    return this.page.evaluate(_path => {
+      return fetch(_path, {
+        method: "GET",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }).then(res => res.json());
+    }, path); // path argument is passed into function when parsed in chromium
+  }
+
+  post(path, data) {
+    // Note: function is stringyfied when passed to chromium
+    return this.page.evaluate(
+      (_path, _data) => {
+        return fetch(_path, {
+          method: "POST",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(_data)
+        }).then(res => res.json());
+      },
+      path,
+      data
+    ); // arguments are passed into function when parsed in chromium
+  }
+
+  execRequests(actions) {
+    Promise.all(
+      actions.map(({ method, path, data }) => {
+        return this[method](path, data);
+      })
+    ); // returns an array of promises and waits for them all to resolve
+  }
 }
 
 module.exports = CustomPage;
