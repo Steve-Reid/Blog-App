@@ -5,5 +5,7 @@ module.exports = {
   mongoURI:
     "mongodb://stevebydesign:gotkotkev@ds113799.mlab.com:13799/blog_dev",
   cookieKey: "123123123",
-  redisUrl: "redis://127.0.0.1:6379"
+  redisUrl: "redis://127.0.0.1:6379",
+  s3KeyId: "AKIAIUXPBUGFR63GGTPA",
+  s3SecretKey: "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"
 };
