@@ -53,9 +53,6 @@ class BlogFormReview extends Component {
 
   onFileChange(e) {
     this.setState({ file: e.target.files[0] });
-    console.log("------------------------------------");
-    console.log(e.target.files);
-    console.log("------------------------------------");
   }
 
   render() {
